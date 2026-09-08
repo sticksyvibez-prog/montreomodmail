@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- BRANDING & CONFIGURATION ---
-GUILD_ID = 1522607630219087892             # Server ID
+GUILD_ID = 1541432639037382746             # Updated Server ID
 MODMAIL_CATEGORY_ID = 1542623930400116756  # Ticket Category ID
 STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID
 
@@ -77,7 +77,15 @@ class DepartmentSelect(discord.ui.Select):
         await interaction.response.defer()
         selected_dept = self.values[0]
         guild = bot.get_guild(GUILD_ID)
+        if not guild:
+            await interaction.followup.send("⚠️ Error: Target server could not be found.", ephemeral=True)
+            return
+
         category = guild.get_channel(MODMAIL_CATEGORY_ID)
+        if not category:
+            await interaction.followup.send("⚠️ Error: Ticket category channel could not be found.", ephemeral=True)
+            return
+
         staff_role = guild.get_role(STAFF_ROLE_ID)
 
         channel_name = f"ticket-{interaction.user.id}"
@@ -163,10 +171,12 @@ async def on_message(message: discord.Message):
 
         guild = bot.get_guild(GUILD_ID)
         if not guild:
+            print(f"❌ Error: Guild with ID {GUILD_ID} not found. Ensure the bot is joined to the server.")
             return
 
         category = guild.get_channel(MODMAIL_CATEGORY_ID)
         if not category:
+            print(f"❌ Error: Category with ID {MODMAIL_CATEGORY_ID} not found in guild {guild.name}.")
             return
 
         channel_name = f"ticket-{message.author.id}"
