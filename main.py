@@ -10,7 +10,7 @@ load_dotenv()
 # --- BRANDING & CONFIGURATION ---
 GUILD_ID = 1522607630219087892             # Server ID
 MODMAIL_CATEGORY_ID = 1540986934808027137  # Ticket Category ID
-STAFF_ROLE_ID = 1540986727538364436        # Staff Role ID
+STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID for Replies/Commands
 
 # Brand Settings
 BRAND_NAME = "Montreo"
@@ -207,9 +207,14 @@ async def on_message(message: discord.Message):
 
     await bot.process_commands(message)
 
+    # 3. DYNAMIC SNIPPET TRIGGER (.snippet_name) INSIDE TICKETS
     if message.content.startswith(".") and message.channel.name.startswith("ticket-"):
         ctx = await bot.get_context(message)
         if ctx.valid:
+            return
+
+        # Check if author has the specific staff role
+        if not isinstance(message.author, discord.Member) or not any(role.id == STAFF_ROLE_ID for role in message.author.roles):
             return
 
         trigger = message.content[1:].split()[0].lower()
@@ -243,13 +248,14 @@ async def on_message(message: discord.Message):
                 pass
 
 
-# --- STAFF CHECK PERMISSION ---
+# --- STAFF CHECK PERMISSION (STRICT ROLE CHECK) ---
 
 def is_staff():
     async def predicate(ctx):
         if not isinstance(ctx.author, discord.Member):
             return False
-        return any(role.id == STAFF_ROLE_ID for role in ctx.author.roles) or ctx.author.guild_permissions.administrator
+        # Strictly checks for role ID 1546910653116190840
+        return any(role.id == STAFF_ROLE_ID for role in ctx.author.roles)
     return commands.check(predicate)
 
 
