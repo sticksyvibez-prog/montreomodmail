@@ -9,7 +9,7 @@ load_dotenv()
 
 # --- BRANDING & CONFIGURATION ---
 GUILD_ID = 1522607630219087892             # Server ID
-MODMAIL_CATEGORY_ID = 1542623930400116756  # Updated Ticket Category ID
+MODMAIL_CATEGORY_ID = 1542623930400116756  # Ticket Category ID
 STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID
 
 # Brand Settings
@@ -67,9 +67,9 @@ class DepartmentSelect(discord.ui.Select):
     def __init__(self, initial_message: discord.Message):
         self.initial_message = initial_message
         options = [
-            discord.SelectOption(label="Human Resources", value="Human Resources"),
-            discord.SelectOption(label="Operations", value="Operations"),
-            discord.SelectOption(label="Public Relations", value="Public Relations")
+            discord.SelectOption(label="Technical Support", value="Technical Support"),
+            discord.SelectOption(label="Commision Service", value="Commision Service"),
+            discord.SelectOption(label="General Support", value="General Support")
         ]
         super().__init__(placeholder="Select a department...", options=options)
 
