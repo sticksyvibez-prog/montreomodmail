@@ -9,8 +9,8 @@ load_dotenv()
 
 # --- BRANDING & CONFIGURATION ---
 GUILD_ID = 1522607630219087892             # Server ID
-MODMAIL_CATEGORY_ID = 1540986934808027137  # Ticket Category ID
-STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID for Replies/Commands
+MODMAIL_CATEGORY_ID = 1542623930400116756  # Updated Ticket Category ID
+STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID
 
 # Brand Settings
 BRAND_NAME = "Montreo"
@@ -213,7 +213,6 @@ async def on_message(message: discord.Message):
         if ctx.valid:
             return
 
-        # Check if author has the specific staff role
         if not isinstance(message.author, discord.Member) or not any(role.id == STAFF_ROLE_ID for role in message.author.roles):
             return
 
@@ -254,7 +253,6 @@ def is_staff():
     async def predicate(ctx):
         if not isinstance(ctx.author, discord.Member):
             return False
-        # Strictly checks for role ID 1546910653116190840
         return any(role.id == STAFF_ROLE_ID for role in ctx.author.roles)
     return commands.check(predicate)
 
