@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- BRANDING & CONFIGURATION ---
-GUILD_ID = 1541432639037382746             # Updated Server ID
+GUILD_ID = 1541432639037382746             # Guild/Server ID
 MODMAIL_CATEGORY_ID = 1542623930400116756  # Ticket Category ID
 STAFF_ROLE_ID = 1546910653116190840        # Dedicated Staff Role ID
 
@@ -118,6 +118,16 @@ class DepartmentSelect(discord.ui.Select):
             for attachment in self.initial_message.attachments:
                 await ticket_channel.send(attachment.url)
 
+        # DM Confirmation sent to the user upon department selection
+        user_opened_embed = discord.Embed(
+            description="Your support ticket has been opened, please wait as an agent will be claiming your ticket shortly.",
+            color=EMBED_COLOR
+        )
+        try:
+            await interaction.user.send(embed=user_opened_embed)
+        except discord.HTTPException:
+            pass
+
         self.view.stop()
 
 
@@ -217,7 +227,7 @@ async def on_message(message: discord.Message):
 
     await bot.process_commands(message)
 
-    # 3. DYNAMIC SNIPPET TRIGGER (.snippet_name) INSIDE TICKETS
+    # DYNAMIC SNIPPET TRIGGER (.snippet_name) INSIDE TICKETS
     if message.content.startswith(".") and message.channel.name.startswith("ticket-"):
         ctx = await bot.get_context(message)
         if ctx.valid:
